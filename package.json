@@ -1,0 +1,23 @@
+{
+  "name": "aurelia-dental",
+  "version": "1.0.0",
+  "description": "Aurelia Dental — luxury dental clinic site with a working booking API and Dr. AI concierge chat backend.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "pages:dev": "wrangler pages dev public --d1=DB=aurelia-dental-db --local",
+    "pages:schema": "wrangler d1 execute aurelia-dental-db --local --file=schema.sql"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

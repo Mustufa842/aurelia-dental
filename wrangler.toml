@@ -1,0 +1,10 @@
+name = "aurelia-dental"
+pages_build_output_dir = "public"
+
+# This local binding is only for `wrangler pages dev` on your machine.
+# The production binding is created in the Cloudflare dashboard —
+# see README.md's "Deploy everything on Cloudflare" section.
+[[d1_databases]]
+binding = "DB"
+database_name = "aurelia-dental-db"
+database_id = "local-dev"

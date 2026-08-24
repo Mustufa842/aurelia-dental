@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURELIA DENTAL — Luxury Oral Health & Aesthetics</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0f0f11',
+                            card: 'rgba(255,255,255,0.05)',
+                            light: '#fafafa',
+                            teal: '#06b6d4',
+                            gold: '#d4a574',
+                            indigo: '#818cf8',
+                            slate: '#18181b',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f0f11;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #06b6d4;
+        }
+
+        /* Shimmer text effect */
+        .text-shimmer {
+            background: linear-gradient(135deg, #ffffff 0%, #06b6d4 50%, #ffffff 100%);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: textShimmer 6s linear infinite;
+        }
+        @keyframes textShimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Custom Cursor */
+        #cursor-dot {
+            pointer-events: none;
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        #cursor-ring {
+            pointer-events: none;
+            transition: transform 0.15s ease-out, border-color 0.2s, width 0.2s, height 0.2s;
+        }
+
+        /* 3D Orbit Ring for AI */
+        .ai-orbit-container {
+            perspective: 800px;
+        }
+        .ai-orbit-ring {
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            border-top-color: #06b6d4;
+            border-right-color: #818cf8;
+            border-bottom-color: #06b6d4;
+            transform-style: preserve-3d;
+            transform: rotateX(65deg) rotateY(20deg);
+            animation: orbitRotate 4s linear infinite;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+        }
+        @keyframes orbitRotate {
+            0% { transform: rotateX(65deg) rotateY(20deg) rotateZ(0deg); }
+            100% { transform: rotateX(65deg) rotateY(20deg) rotateZ(360deg); }
+        }
+
+        /* 3D Card Hover Perspective */
+        .tilt-card {
+            transform-style: preserve-3d;
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+        }
+
+        /* Radar Pulse */
+        @keyframes radarPing {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            100% { transform: scale(1.7); opacity: 0; }
+        }
+        .radar-pulse {
+            animation: radarPing 3s infinite cubic-bezier(0, 0, 0.2, 1);
+        }
+
+        /* Floating background orbs */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+        .animate-float {
+            animation: floatSlow 12s ease-in-out infinite;
+        }
+
+        /* Glassmorphism utility */
+        .glass-dark {
+            background: rgba(15, 15, 17, 0.82);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-light {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        /* Pure CSS 3D Tooth Canvas Simulator */
+        .tooth-3d-wrapper {
+            perspective: 1200px;
+        }
+        .tooth-3d-model {
+            transform-style: preserve-3d;
+            animation: spinTooth 20s infinite linear;
+        }
+        @keyframes spinTooth {
+            0% { transform: rotateY(0deg) rotateX(5deg); }
+            100% { transform: rotateY(360deg) rotateX(5deg); }
+        }
+
+        /* Typing dots animation */
+        @keyframes dotBounce {
+            0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+        .dot-1 { animation: dotBounce 1.4s infinite ease-in-out 0s; }
+        .dot-2 { animation: dotBounce 1.4s infinite ease-in-out 0.2s; }
+        .dot-3 { animation: dotBounce 1.4s infinite ease-in-out 0.4s; }
+
+        /* Grain overlay */
+        .bg-grain {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+
+        /* Scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.8s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .reveal.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .reveal { opacity: 1; transform: none; transition: none; }
+            .animate-float, .radar-pulse, .ai-orbit-ring, .tooth-3d-model { animation: none !important; }
+        }
+
+        /* Navbar shrink-on-scroll */
+        #navbar.navbar-scrolled {
+            padding-top: 0.9rem;
+            padding-bottom: 0.9rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+        }
+
+        /* Fade-in for chat messages */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn { animation: fadeIn 0.3s ease-out; }
+
+        /* Visible keyboard focus everywhere (accessibility) */
+        a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+            outline: 2px solid #06b6d4;
+            outline-offset: 2px;
+        }
+
+        /* Booking form status banner + button spinner */
+        .form-banner {
+            font-size: 0.75rem;
+            border-radius: 0.9rem;
+            padding: 0.85rem 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            line-height: 1.5;
+        }
+        .form-banner.success { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.35); color: #6ee7b7; }
+        .form-banner.error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.35); color: #fca5a5; }
+        .btn-spinner {
+            width: 14px; height: 14px; border-radius: 50%;
+            border: 2px solid rgba(0,0,0,0.25); border-top-color: #000;
+            animation: spin 0.7s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-brand-dark text-white font-sans overflow-x-hidden selection:bg-brand-teal selection:text-black bg-grain">
+
+    <!-- CUSTOM CURSOR (Desktop) -->
+    <div id="cursor-dot" class="hidden md:block fixed top-0 left-0 w-2 h-2 bg-brand-teal rounded-full z-[9999] -translate-x-1/2 -translate-y-1/2"></div>
+    <div id="cursor-ring" class="hidden md:block fixed top-0 left-0 w-8 h-8 border border-brand-teal/50 rounded-full z-[9998] -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+
+    <!-- BACKGROUND AMBIENT GLOW ORBS -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-brand-teal/15 rounded-full blur-[140px] animate-float"></div>
+        <div class="absolute top-[40%] right-[-5%] w-[600px] h-[600px] bg-brand-indigo/15 rounded-full blur-[160px] animate-float" style="animation-delay: -4s;"></div>
+        <div class="absolute bottom-[-10%] left-[20%] w-[550px] h-[550px] bg-brand-gold/10 rounded-full blur-[150px] animate-float" style="animation-delay: -8s;"></div>
+    </div>
+
+    <!-- NAVBAR -->
+    <header id="navbar" class="fixed top-0 left-0 w-full z-40 transition-all duration-300 py-6 px-6 lg:px-16 glass-dark border-b border-white/5">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-teal to-brand-indigo flex items-center justify-center p-0.5 shadow-lg shadow-brand-teal/20 group-hover:scale-105 transition-transform">
+                    <div class="w-full h-full bg-brand-dark rounded-[10px] flex items-center justify-center">
+                        <i data-lucide="sparkles" class="w-5 h-5 text-brand-teal"></i>
+                    </div>
+                </div>
+                <div>
+                    <span class="font-serif text-2xl font-semibold tracking-wider text-white block leading-none">AURELIA</span>
+                    <span class="text-[9px] tracking-[0.3em] uppercase text-brand-gold block mt-1">Dental Concierge</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-300">
+                <a href="#hero" class="hover:text-brand-teal transition-colors">Home</a>
+                <a href="#services" class="hover:text-brand-teal transition-colors">Services</a>
+                <a href="#ai-spotlight" class="hover:text-brand-teal transition-colors flex items-center gap-1.5 text-brand-teal">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Dr. AI
+                </a>
+                <a href="#results" class="hover:text-brand-teal transition-colors">Results</a>
+                <a href="#team" class="hover:text-brand-teal transition-colors">Specialists</a>
+                <a href="#contact" class="hover:text-brand-teal transition-colors">Contact</a>
+            </nav>
+
+            <div class="hidden sm:flex items-center gap-4">
+                <button onclick="openChatWithPrompt('Hi Dr. AI, I would like to inquire about booking an initial consultation.')" class="px-5 py-2.5 rounded-full glass-dark hover:border-brand-teal/50 text-xs font-medium tracking-wide flex items-center gap-2 border border-white/10 transition-all hover:shadow-lg hover:shadow-brand-teal/10">
+                    <i data-lucide="bot" class="w-4 h-4 text-brand-teal"></i>
+                    <span>Ask Dr. AI</span>
+                </button>
+                <a href="#booking" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-brand-teal to-cyan-500 text-black font-semibold text-xs tracking-wider uppercase hover:shadow-lg hover:shadow-brand-teal/30 hover:scale-[1.02] active:scale-95 transition-all">
+                    Book Visit
+                </a>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="md:hidden text-white" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full glass-dark border-b border-white/10 py-6 px-6 flex flex-col gap-4 text-center">
+            <a href="#hero" class="py-2 text-zinc-300 hover:text-white">Home</a>
+            <a href="#services" class="py-2 text-zinc-300 hover:text-white">Services</a>
+            <a href="#ai-spotlight" class="py-2 text-brand-teal font-medium">Dr. AI Assistant</a>
+            <a href="#results" class="py-2 text-zinc-300 hover:text-white">Results</a>
+            <a href="#team" class="py-2 text-zinc-300 hover:text-white">Specialists</a>
+            <a href="#booking" class="py-2.5 rounded-full bg-brand-teal text-black font-semibold">Book Appointment</a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="min-h-screen relative pt-32 pb-20 flex items-center justify-center px-6 lg:px-16 overflow-hidden">
+        <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+            
+            <!-- Left Text Content -->
+            <div class="lg:col-span-7 text-center lg:text-left space-y-8">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-dark border border-brand-teal/30 text-xs tracking-widest text-brand-teal uppercase">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                    <span>Next-Generation Dental Excellence</span>
+                </div>
+                
+                <h1 class="font-serif text-5xl sm:text-6xl lg:text-7xl font-medium leading-[1.08] tracking-tight">
+                    Your Smile Deserves <br>
+                    <span class="text-shimmer italic font-normal">Masterpiece</span> Treatment.
+                </h1>
+
+                <p class="text-zinc-400 text-lg sm:text-xl font-light max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                    Merging luxury spa tranquility with ultra-precise aesthetic dentistry. Guided by world-renowned specialists and our bespoke AI concierge.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                    <a href="#booking" class="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-brand-teal via-cyan-400 to-brand-teal text-black font-semibold text-sm tracking-widest uppercase hover:shadow-xl hover:shadow-brand-teal/25 hover:scale-[1.03] transition-all text-center">
+                        Reserve Consultation
+                    </a>
+                    <button onclick="openChatWithPrompt('Hi Dr. AI! Can you walk me through your signature smile makeover treatments?')" class="w-full sm:w-auto px-8 py-4 rounded-full glass-dark border border-white/15 hover:border-brand-teal/50 text-white font-medium text-sm tracking-wider flex items-center justify-center gap-3 transition-all hover:bg-white/5">
+                        <i data-lucide="bot" class="w-5 h-5 text-brand-teal"></i>
+                        <span>Consult Dr. AI Concierge</span>
+                    </button>
+                </div>
+
+                <!-- Trust Badges -->
+                <div class="pt-10 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-6 text-center lg:text-left">
+                    <div>
+                        <div class="font-serif text-2xl text-white font-bold">12,000+</div>
+                        <div class="text-xs text-zinc-500 uppercase tracking-wider mt-0.5">Smiles Transformed</div>
+                    </div>
+                    <div>
+                        <div class="font-serif text-2xl text-white font-bold">99.8%</div>
+                        <div class="text-xs text-zinc-500 uppercase tracking-wider mt-0.5">Satisfaction Rate</div>
+                    </div>
+                    <div>
+                        <div class="font-serif text-2xl text-white font-bold">18+</div>
+                        <div class="text-xs text-zinc-500 uppercase tracking-wider mt-0.5">Global Master Dentists</div>
+                    </div>
+                    <div>
+                        <div class="font-serif text-2xl text-brand-teal font-bold flex items-center justify-center lg:justify-start gap-1">
+                            <span>24/7</span>
+                            <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        </div>
+                        <div class="text-xs text-zinc-500 uppercase tracking-wider mt-0.5">AI Care Concierge</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right 3D Visual Element (Interactive Ceramic Tooth Model) -->
+            <div class="lg:col-span-5 flex justify-center items-center relative">
+                <div class="tooth-3d-wrapper relative w-[320px] h-[320px] sm:w-[440px] sm:h-[440px] flex items-center justify-center">
+                    <!-- Soft Teal Glow Base -->
+                    <div class="absolute w-72 h-72 bg-brand-teal/20 rounded-full blur-[90px] pointer-events-none"></div>
+                    <div class="absolute w-40 h-40 bg-brand-indigo/20 rounded-full blur-[70px] pointer-events-none translate-x-16 -translate-y-10"></div>
+
+                    <!-- Rotating Ground-Contact Shadow -->
+                    <div class="absolute bottom-4 w-40 h-8 bg-black/40 rounded-full blur-xl"></div>
+
+                    <!-- Real Anatomical 3D Tooth Render (layered SVG, true 3D rotation + mouse parallax) -->
+                    <div id="hero-3d-tooth" class="tooth-3d-model relative w-64 h-80 sm:w-72 sm:h-96 flex items-center justify-center cursor-grab active:cursor-grabbing drop-shadow-[0_25px_45px_rgba(6,182,212,0.35)]">
+                        <svg viewBox="0 0 240 320" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="enamelBody" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#ffffff"/>
+                                    <stop offset="45%" stop-color="#f4fbfd"/>
+                                    <stop offset="100%" stop-color="#cfeef4"/>
+                                </linearGradient>
+                                <linearGradient id="enamelShade" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+                                    <stop offset="100%" stop-color="#9fd9e6" stop-opacity="0.35"/>
+                                </linearGradient>
+                                <linearGradient id="rootGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#eef6f8"/>
+                                    <stop offset="100%" stop-color="#c8dde2"/>
+                                </linearGradient>
+                                <radialGradient id="specular" cx="35%" cy="22%" r="45%">
+                                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+                                    <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+                                </radialGradient>
+                            </defs>
+
+                            <!-- Crown -->
+                            <path d="M46 34 C46 4 90 -6 120 -6 C150 -6 194 4 194 34 C194 78 176 118 158 148 C150 162 146 176 143 196 L136 196 C133 172 129 158 120 158 C111 158 107 172 104 196 L97 196 C94 176 90 162 82 148 C64 118 46 78 46 34 Z"
+                                  fill="url(#enamelBody)" stroke="#a9d6de" stroke-width="1.5"/>
+
+                            <!-- Crown shading pass -->
+                            <path d="M46 34 C46 4 90 -6 120 -6 C150 -6 194 4 194 34 C194 78 176 118 158 148 C150 162 146 176 143 196 L136 196 C133 172 129 158 120 158 C111 158 107 172 104 196 L97 196 C94 176 90 162 82 148 C64 118 46 78 46 34 Z"
+                                  fill="url(#enamelShade)" opacity="0.5"/>
+
+                            <!-- Cusp grooves (occlusal detail) -->
+                            <path d="M78 8 C95 22 105 40 108 62" stroke="#bfe4ec" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.7"/>
+                            <path d="M162 8 C145 22 135 40 132 62" stroke="#bfe4ec" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.7"/>
+                            <path d="M120 6 L120 70" stroke="#bfe4ec" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.5"/>
+
+                            <!-- Specular highlight -->
+                            <ellipse cx="88" cy="46" rx="34" ry="52" fill="url(#specular)" transform="rotate(-18 88 46)"/>
+                            <ellipse cx="150" cy="70" rx="10" ry="26" fill="#ffffff" opacity="0.35" transform="rotate(12 150 70)"/>
+
+                            <!-- Roots -->
+                            <path d="M97 196 C93 226 90 252 84 278 C81 292 90 300 97 292 C104 282 106 254 104 196 Z" fill="url(#rootGrad)" stroke="#b9d8dd" stroke-width="1.2"/>
+                            <path d="M143 196 C147 226 150 252 156 278 C159 292 150 300 143 292 C136 282 134 254 136 196 Z" fill="url(#rootGrad)" stroke="#b9d8dd" stroke-width="1.2"/>
+                            <path d="M120 158 C118 200 118 240 120 276 C121 288 128 288 128 276 C129 240 128 200 126 158 Z" fill="url(#rootGrad)" opacity="0.9"/>
+
+                            <!-- Fine root texture lines -->
+                            <path d="M91 210 C89 236 87 258 84 276" stroke="#9fc8ce" stroke-width="1" opacity="0.5" fill="none"/>
+                            <path d="M149 210 C151 236 153 258 156 276" stroke="#9fc8ce" stroke-width="1" opacity="0.5" fill="none"/>
+                        </svg>
+
+                        <!-- Ambient sparkle accent -->
+                        <div class="absolute top-6 right-8 w-10 h-10 rounded-full bg-brand-teal/15 border border-brand-teal/40 flex items-center justify-center backdrop-blur-sm">
+                            <i data-lucide="sparkles" class="w-5 h-5 text-brand-teal animate-pulse"></i>
+                        </div>
+                    </div>
+
+                    <!-- Floating Orbiting Micro Badge -->
+                    <div class="absolute -bottom-2 bg-brand-dark/90 border border-brand-gold/40 px-5 py-2.5 rounded-2xl backdrop-blur-xl shadow-2xl flex items-center gap-3 animate-bounce" style="animation-duration: 4s;">
+                        <div class="w-3 h-3 rounded-full bg-brand-gold animate-ping"></div>
+                        <span class="text-xs font-serif italic text-brand-gold">Aesthetic Perfection, Precision Rendered</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION (Light Section with Luxury Contrast) -->
+    <section id="services" class="reveal py-28 bg-brand-light text-brand-dark relative z-10 rounded-[40px] my-12 shadow-2xl">
+        <div class="max-w-7xl mx-auto px-6 lg:px-16">
+            <div class="text-center max-w-3xl mx-auto space-y-4 mb-20">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-teal/10 border border-brand-teal/30 text-xs font-semibold tracking-widest text-brand-teal uppercase">
+                    Signature Offerings
+                </div>
+                <h2 class="font-serif text-4xl sm:text-5xl font-semibold tracking-tight text-brand-dark">
+                    Crafted to Aesthetic Perfection
+                </h2>
+                <p class="text-zinc-600 font-light text-base sm:text-lg">
+                    Every procedure is custom-architected using digital smile design, painless laser technology, and artisan ceramic craftsmanship.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Service 1 -->
+                <div class="tilt-card glass-light p-8 rounded-3xl border border-black/5 hover:border-brand-teal/40 transition-all duration-300 group hover:-translate-y-2 hover:shadow-2xl hover:shadow-brand-teal/10 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-brand-teal/10 flex items-center justify-center text-brand-teal mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="sparkles" class="w-7 h-7"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl font-medium mb-3">Veneers & Smile Makeovers</h3>
+                        <p class="text-zinc-600 text-sm leading-relaxed mb-6">
+                            Handcrafted porcelain laminate veneers designed to compliment your facial symmetry and natural luminescence.
+                        </p>
+                    </div>
+                    <button onclick="openChatWithPrompt('Tell me more about Porcelain Veneers and the Smile Makeover process.')" class="text-xs font-semibold text-brand-teal flex items-center gap-2 group-hover:translate-x-1 transition-transform">
+                        <span>Ask Dr. AI About Veneers</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="tilt-card glass-light p-8 rounded-3xl border border-black/5 hover:border-brand-teal/40 transition-all duration-300 group hover:-translate-y-2 hover:shadow-2xl hover:shadow-brand-teal/10 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-brand-indigo/10 flex items-center justify-center text-brand-indigo mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="shield-check" class="w-7 h-7"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl font-medium mb-3">3D Guided Dental Implants</h3>
+                        <p class="text-zinc-600 text-sm leading-relaxed mb-6">
+                            Permanent, natural-feeling tooth restoration utilizing CBCT 3D guided surgery for painless, same-day precision.
+                        </p>
+                    </div>
+                    <button onclick="openChatWithPrompt('What is the cost and timeline for 3D Guided Dental Implants?')" class="text-xs font-semibold text-brand-indigo flex items-center gap-2 group-hover:translate-x-1 transition-transform">
+                        <span>Ask Dr. AI About Implants</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="tilt-card glass-light p-8 rounded-3xl border border-black/5 hover:border-brand-teal/40 transition-all duration-300 group hover:-translate-y-2 hover:shadow-2xl hover:shadow-brand-teal/10 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-brand-gold/10 flex items-center justify-center text-brand-gold mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="sun" class="w-7 h-7"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl font-medium mb-3">Laser Teeth Whitening</h3>
+                        <p class="text-zinc-600 text-sm leading-relaxed mb-6">
+                            Medical-grade LED laser whitening lifting up to 8 shades in 45 minutes with absolute enamel safety and zero sensitivity.
+                        </p>
+                    </div>
+                    <button onclick="openChatWithPrompt('How does Laser Teeth Whitening work and how long do results last?')" class="text-xs font-semibold text-brand-gold flex items-center gap-2 group-hover:translate-x-1 transition-transform">
+                        <span>Ask Dr. AI About Whitening</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="tilt-card glass-light p-8 rounded-3xl border border-black/5 hover:border-brand-teal/40 transition-all duration-300 group hover:-translate-y-2 hover:shadow-2xl hover:shadow-brand-teal/10 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="layers" class="w-7 h-7"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl font-medium mb-3">Invisalign® Diamond Care</h3>
+                        <p class="text-zinc-600 text-sm leading-relaxed mb-6">
+                            Virtually invisible custom orthotic aligners designed via AI tooth movement prediction models for rapid alignment.
+                        </p>
+                    </div>
+                    <button onclick="openChatWithPrompt('Am I a good candidate for Invisalign clear aligners?')" class="text-xs font-semibold text-emerald-600 flex items-center gap-2 group-hover:translate-x-1 transition-transform">
+                        <span>Ask Dr. AI About Aligners</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Service 5 -->
+                <div class="tilt-card glass-light p-8 rounded-3xl border border-black/5 hover:border-brand-teal/40 transition-all duration-300 group hover:-translate-y-2 hover:shadow-2xl hover:shadow-brand-teal/10 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-sky-500/10 flex items-center justify-center text-sky-600 mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="heart-pulse" class="w-7 h-7"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl font-medium mb-3">Microscopic Endodontics</h3>
+                        <p class="text-zinc-600 text-sm leading-relaxed mb-6">
+                            High-magnification painless root preservation treatments designed to save natural tooth structures effortlessly.
+                        </p>
+                    </div>
+                    <button onclick="openChatWithPrompt('Is microscopic root canal treatment completely painless?')" class="text-xs font-semibold text-sky-600 flex items-center gap-2 group-hover:translate-x-1 transition-transform">
+                        <span>Ask Dr. AI About Endodontics</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Service 6 -->
+                <div class="tilt-card glass-light p-8 rounded-3xl border border-black/5 hover:border-brand-teal/40 transition-all duration-300 group hover:-translate-y-2 hover:shadow-2xl hover:shadow-brand-teal/10 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-600 mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="smile" class="w-7 h-7"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl font-medium mb-3">Holistic Preventive Spa</h3>
+                        <p class="text-zinc-600 text-sm leading-relaxed mb-6">
+                            Comprehensive periodontal detox, ozone therapy, and ultrasonic polishing in a calming luxury spa environment.
+                        </p>
+                    </div>
+                    <button onclick="openChatWithPrompt('What is included in the Holistic Preventive Spa experience?')" class="text-xs font-semibold text-purple-600 flex items-center gap-2 group-hover:translate-x-1 transition-transform">
+                        <span>Ask Dr. AI About Preventative Spa</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- AI SPOTLIGHT SECTION -->
+    <section id="ai-spotlight" class="reveal py-24 relative z-10 px-6 lg:px-16 overflow-hidden">
+        <div class="max-w-7xl mx-auto glass-dark rounded-[36px] p-8 lg:p-16 border border-brand-teal/30 relative">
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-brand-teal/20 rounded-full blur-[100px] pointer-events-none"></div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left AI Visual Hero -->
+                <div class="lg:col-span-5 flex flex-col items-center text-center">
+                    <div class="relative w-48 h-48 flex items-center justify-center mb-8">
+                        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-brand-teal to-brand-indigo blur-2xl opacity-50 animate-pulse"></div>
+                        <div class="w-36 h-36 rounded-full bg-gradient-to-tr from-brand-teal to-brand-indigo p-1 shadow-2xl relative z-10">
+                            <div class="w-full h-full bg-brand-dark rounded-full flex items-center justify-center">
+                                <i data-lucide="bot" class="w-16 h-16 text-brand-teal"></i>
+                            </div>
+                        </div>
+                        <!-- Outer Orbit Rings -->
+                        <div class="ai-orbit-ring"></div>
+                        <div class="ai-orbit-ring" style="animation-duration: 6s; animation-direction: reverse;"></div>
+                    </div>
+
+                    <h3 class="font-serif text-3xl font-medium text-white mb-2">Dr. AI Concierge</h3>
+                    <p class="text-xs text-brand-teal tracking-widest uppercase font-semibold mb-4">Intelligent Oral Health Assistant</p>
+                    <p class="text-zinc-400 text-sm font-light max-w-sm">
+                        Engineered with dental diagnostic protocols to provide instant guidance, transparent pricing, and instant bookings 24/7.
+                    </p>
+                </div>
+
+                <!-- Right AI Capability List -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="space-y-2">
+                        <div class="text-xs text-brand-gold uppercase tracking-widest font-semibold">24/7 Intelligent Concierge</div>
+                        <h2 class="font-serif text-3xl sm:text-4xl font-medium">Healthcare Hospitality Meets Neural Intelligence</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+                        <div class="p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-brand-teal/30 transition-colors">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i data-lucide="search" class="w-5 h-5 text-brand-teal"></i>
+                                <h4 class="font-medium text-sm text-white">Symptom Assessment</h4>
+                            </div>
+                            <p class="text-xs text-zinc-400">Describe discomfort or goals to receive instant preliminary guidance.</p>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-brand-teal/30 transition-colors">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i data-lucide="calendar" class="w-5 h-5 text-brand-teal"></i>
+                                <h4 class="font-medium text-sm text-white">60-Second Booking</h4>
+                            </div>
+                            <p class="text-xs text-zinc-400">Reserve available doctor time slots seamlessly inside the chat interface.</p>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-brand-teal/30 transition-colors">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i data-lucide="dollar-sign" class="w-5 h-5 text-brand-teal"></i>
+                                <h4 class="font-medium text-sm text-white">Instant Quotes</h4>
+                            </div>
+                            <p class="text-xs text-zinc-400">Transparent pricing breakdowns and membership plan options.</p>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-brand-teal/30 transition-colors">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i data-lucide="user-check" class="w-5 h-5 text-brand-teal"></i>
+                                <h4 class="font-medium text-sm text-white">Doctor Matching</h4>
+                            </div>
+                            <p class="text-xs text-zinc-400">Matched with specialists based on your unique aesthetic preferences.</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <button onclick="openChatWithPrompt('Hi Dr. AI! I would like to test your symptom checker and book an appointment.')" class="px-8 py-3.5 rounded-full bg-gradient-to-r from-brand-teal to-brand-indigo text-white font-semibold text-xs tracking-widest uppercase hover:shadow-lg hover:shadow-brand-teal/30 transition-all flex items-center gap-3">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i>
+                            <span>Launch Dr. AI Experience</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- BEFORE / AFTER RESULTS CAROUSEL -->
+    <section id="results" class="reveal py-24 relative z-10 px-6 lg:px-16">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <div class="text-xs font-semibold text-brand-gold tracking-widest uppercase mb-2">Transformations</div>
+                <h2 class="font-serif text-4xl font-medium">Proven Smile Architecture</h2>
+            </div>
+
+            <!-- 3D Perspective Gallery Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Transformation 1 -->
+                <div class="tilt-card glass-dark p-6 rounded-3xl border border-white/10 space-y-4">
+                    <div class="relative h-64 rounded-2xl overflow-hidden group">
+                        <div class="absolute inset-0 grid grid-cols-2">
+                            <div class="bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=600&q=80');">
+                                <span class="absolute bottom-2 left-2 px-2 py-1 bg-black/60 rounded text-[10px] text-zinc-300">BEFORE</span>
+                            </div>
+                            <div class="bg-cover bg-center border-l-2 border-brand-teal" style="background-image: url('https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&w=600&q=80');">
+                                <span class="absolute bottom-2 right-2 px-2 py-1 bg-brand-teal/80 rounded text-[10px] text-black font-semibold">AFTER</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-serif text-xl font-medium text-white">Full Ceramic Restoration</h4>
+                        <p class="text-xs text-zinc-400 mt-1">Patient: Sophia M. — 10 Veneers + Alignment</p>
+                    </div>
+                </div>
+
+                <!-- Transformation 2 -->
+                <div class="tilt-card glass-dark p-6 rounded-3xl border border-white/10 space-y-4">
+                    <div class="relative h-64 rounded-2xl overflow-hidden group">
+                        <div class="absolute inset-0 grid grid-cols-2">
+                            <div class="bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1571772996211-2f02c9727629?auto=format&fit=crop&w=600&q=80');">
+                                <span class="absolute bottom-2 left-2 px-2 py-1 bg-black/60 rounded text-[10px] text-zinc-300">BEFORE</span>
+                            </div>
+                            <div class="bg-cover bg-center border-l-2 border-brand-teal" style="background-image: url('https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&w=600&q=80');">
+                                <span class="absolute bottom-2 right-2 px-2 py-1 bg-brand-teal/80 rounded text-[10px] text-black font-semibold">AFTER</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-serif text-xl font-medium text-white">Laser Whitening & Re-shaping</h4>
+                        <p class="text-xs text-zinc-400 mt-1">Patient: Marcus V. — 1 Session Whitening</p>
+                    </div>
+                </div>
+
+                <!-- Transformation 3 -->
+                <div class="tilt-card glass-dark p-6 rounded-3xl border border-white/10 space-y-4">
+                    <div class="relative h-64 rounded-2xl overflow-hidden group">
+                        <div class="absolute inset-0 grid grid-cols-2">
+                            <div class="bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=600&q=80');">
+                                <span class="absolute bottom-2 left-2 px-2 py-1 bg-black/60 rounded text-[10px] text-zinc-300">BEFORE</span>
+                            </div>
+                            <div class="bg-cover bg-center border-l-2 border-brand-teal" style="background-image: url('https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=600&q=80');">
+                                <span class="absolute bottom-2 right-2 px-2 py-1 bg-brand-teal/80 rounded text-[10px] text-black font-semibold">AFTER</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-serif text-xl font-medium text-white">3D Implant Arch</h4>
+                        <p class="text-xs text-zinc-400 mt-1">Patient: Elena R. — Same-Day Implant Arch</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TEAM SECTION -->
+    <section id="team" class="reveal py-24 bg-brand-light text-brand-dark relative z-10 rounded-[40px] my-12">
+        <div class="max-w-7xl mx-auto px-6 lg:px-16">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <div class="text-xs font-semibold text-brand-teal tracking-widest uppercase mb-2">Master Artists</div>
+                <h2 class="font-serif text-4xl font-semibold">World-Class Specialists</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Doctor 1 -->
+                <div class="glass-light p-6 rounded-3xl border border-black/5 flex flex-col justify-between">
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=600&q=80" alt="Dr. Sarah Chen" class="w-full h-72 object-cover rounded-2xl mb-6">
+                        <h3 class="font-serif text-2xl font-medium">Dr. Sarah Chen, DDS</h3>
+                        <p class="text-xs font-semibold text-brand-teal uppercase tracking-wider mb-2">Aesthetic Prosthodontist</p>
+                        <p class="text-xs text-zinc-600 leading-relaxed mb-6">14+ years crafting red-carpet smiles for celebrity and international clientele.</p>
+                    </div>
+                    <button onclick="openChatWithPrompt('I would like to consult with Dr. Sarah Chen for cosmetic veneers.')" class="w-full py-2.5 rounded-xl bg-brand-dark text-white text-xs font-medium hover:bg-brand-teal hover:text-black transition-colors">
+                        Consult via Dr. AI
+                    </button>
+                </div>
+
+                <!-- Doctor 2 -->
+                <div class="glass-light p-6 rounded-3xl border border-black/5 flex flex-col justify-between">
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=600&q=80" alt="Dr. Alexander Vance" class="w-full h-72 object-cover rounded-2xl mb-6">
+                        <h3 class="font-serif text-2xl font-medium">Dr. Alexander Vance, MD</h3>
+                        <p class="text-xs font-semibold text-brand-indigo uppercase tracking-wider mb-2">Oral & Maxillofacial Surgeon</p>
+                        <p class="text-xs text-zinc-600 leading-relaxed mb-6">Specializing in 3D-guided surgical reconstructions and full-arch implants.</p>
+                    </div>
+                    <button onclick="openChatWithPrompt('I would like to consult with Dr. Alexander Vance regarding dental implants.')" class="w-full py-2.5 rounded-xl bg-brand-dark text-white text-xs font-medium hover:bg-brand-teal hover:text-black transition-colors">
+                        Consult via Dr. AI
+                    </button>
+                </div>
+
+                <!-- Doctor 3 -->
+                <div class="glass-light p-6 rounded-3xl border border-black/5 flex flex-col justify-between">
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1594824813566-88855ce78347?auto=format&fit=crop&w=600&q=80" alt="Dr. Elena Rostova" class="w-full h-72 object-cover rounded-2xl mb-6">
+                        <h3 class="font-serif text-2xl font-medium">Dr. Elena Rostova, DMD</h3>
+                        <p class="text-xs font-semibold text-brand-gold uppercase tracking-wider mb-2">Laser Orthodontic Specialist</p>
+                        <p class="text-xs text-zinc-600 leading-relaxed mb-6">Pioneer in accelerated clear aligner therapy and micro-aesthetic alignment.</p>
+                    </div>
+                    <button onclick="openChatWithPrompt('I would like to consult with Dr. Elena Rostova regarding Invisalign.')" class="w-full py-2.5 rounded-xl bg-brand-dark text-white text-xs font-medium hover:bg-brand-teal hover:text-black transition-colors">
+                        Consult via Dr. AI
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOOKING & CONTACT SECTION -->
+    <section id="booking" class="reveal py-24 relative z-10 px-6 lg:px-16">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <div class="lg:col-span-6 space-y-6">
+                <div class="text-xs font-semibold text-brand-teal tracking-widest uppercase">Reserve Experience</div>
+                <h2 class="font-serif text-4xl sm:text-5xl font-medium">Begin Your Transformation</h2>
+                <p class="text-zinc-400 font-light text-base">
+                    Our VIP concierge ensures a seamlessly luxurious appointment process tailored to your privacy and schedule.
+                </p>
+
+                <div class="glass-dark p-6 rounded-2xl border border-white/10 space-y-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-brand-teal/10 flex items-center justify-center text-brand-teal">
+                            <i data-lucide="bot" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-white">Prefer Instant Booking via AI?</h4>
+                            <p class="text-xs text-zinc-400">Dr. AI can check live calendar availability right now.</p>
+                        </div>
+                    </div>
+                    <button onclick="openChatWithPrompt('I would like to book an appointment right now.')" class="w-full py-3 rounded-xl bg-gradient-to-r from-brand-teal to-brand-indigo text-white text-xs font-semibold uppercase tracking-wider">
+                        Book Instantly with Dr. AI
+                    </button>
+                </div>
+            </div>
+
+            <div class="lg:col-span-6 glass-dark p-8 rounded-3xl border border-white/10 space-y-4">
+                <h3 class="font-serif text-2xl font-medium mb-4">Direct Reservation Form</h3>
+                <form id="booking-form" onsubmit="handleFormSubmit(event)" class="space-y-4" novalidate>
+                    <div id="form-banner-slot"></div>
+                    <div>
+                        <label for="bf-name" class="block text-xs font-medium text-zinc-400 mb-1">Full Name</label>
+                        <input id="bf-name" name="name" type="text" required minlength="2" placeholder="Lord/Lady Harrison" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-zinc-600 focus:outline-none focus:border-brand-teal text-sm">
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="bf-phone" class="block text-xs font-medium text-zinc-400 mb-1">Phone Number</label>
+                            <input id="bf-phone" name="phone" type="tel" required placeholder="+1 (555) 000-0000" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-zinc-600 focus:outline-none focus:border-brand-teal text-sm">
+                        </div>
+                        <div>
+                            <label for="bf-email" class="block text-xs font-medium text-zinc-400 mb-1">Email (optional)</label>
+                            <input id="bf-email" name="email" type="email" placeholder="you@example.com" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-zinc-600 focus:outline-none focus:border-brand-teal text-sm">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="bf-treatment" class="block text-xs font-medium text-zinc-400 mb-1">Treatment Interest</label>
+                            <select id="bf-treatment" name="treatment" class="w-full px-4 py-3 rounded-xl bg-zinc-900 border border-white/10 text-white focus:outline-none focus:border-brand-teal text-sm">
+                                <option>Veneers & Smile Design</option>
+                                <option>3D Dental Implants</option>
+                                <option>Laser Whitening</option>
+                                <option>Invisalign® Alignment</option>
+                                <option>General Consultation</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="bf-date" class="block text-xs font-medium text-zinc-400 mb-1">Preferred Date</label>
+                            <input id="bf-date" name="date" type="date" required class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-brand-teal text-sm">
+                        </div>
+                    </div>
+                    <button id="bf-submit" type="submit" class="w-full py-4 rounded-xl bg-brand-teal text-black font-semibold text-xs tracking-widest uppercase hover:bg-cyan-300 transition-colors flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
+                        <span id="bf-submit-label">Submit Reservation</span>
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#09090b] border-t border-white/5 py-12 px-6 lg:px-16 text-xs text-zinc-500 relative z-10">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <span class="font-serif text-lg font-semibold text-white">AURELIA DENTAL</span>
+                <span class="text-zinc-600">|</span>
+                <span>Powered by Dr. AI Intelligence Concierge</span>
+            </div>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-zinc-300">Privacy Policy</a>
+                <a href="#" class="hover:text-zinc-300">Terms of Care</a>
+                <a href="#" class="hover:text-zinc-300">VIP Membership</a>
+            </div>
+            <div>
+                © 2026 Aurelia Dental Aesthetics. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ========================================================================= -->
+    <!-- 🤖 DR. AI ASSISTANT — 3D FLOATING CONCIERGE & CHAT INTERFACE -->
+    <!-- ========================================================================= -->
+
+    <!-- AI Toggle Button (Floating Bottom Right) -->
+    <div id="ai-toggle-btn" class="fixed bottom-6 right-6 z-50 cursor-pointer group" onclick="toggleAIChat()">
+        <!-- Radar Pulse Background Effect -->
+        <div class="absolute inset-0 rounded-full bg-brand-teal/30 radar-pulse pointer-events-none"></div>
+
+        <!-- Notification Badge -->
+        <div id="ai-notification-dot" class="absolute -top-1 -right-1 w-4 h-4 bg-brand-gold rounded-full border-2 border-brand-dark flex items-center justify-center text-[9px] font-bold text-black animate-bounce">
+            1
+        </div>
+
+        <!-- 3D Outer Orbiting Ring Container -->
+        <div class="relative w-16 h-16 rounded-full glass-dark border border-white/15 flex items-center justify-center shadow-2xl transition-all duration-300 group-hover:scale-110 group-hover:border-brand-teal/50">
+            <div class="ai-orbit-ring"></div>
+            
+            <!-- Icon -->
+            <div class="relative z-10 flex items-center justify-center text-brand-teal">
+                <i data-lucide="bot" class="w-7 h-7"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- First Visit Proactive Tooltip -->
+    <div id="ai-proactive-tooltip" class="fixed bottom-24 right-6 z-40 glass-dark border border-brand-teal/30 px-4 py-3 rounded-2xl shadow-2xl max-w-xs transition-all duration-500 opacity-0 transform translate-y-4 pointer-events-none">
+        <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full bg-brand-teal/20 flex items-center justify-center text-brand-teal shrink-0 mt-0.5">
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+            </div>
+            <div>
+                <p class="text-xs font-medium text-white">Greetings! I am Dr. AI 👋</p>
+                <p class="text-[11px] text-zinc-400 mt-0.5">Need help evaluating dental goals or booking an appointment?</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI CHAT WINDOW PANEL -->
+    <div id="ai-chat-window" class="fixed bottom-6 right-6 z-50 w-[90vw] sm:w-[400px] h-[580px] max-h-[85vh] glass-dark rounded-[28px] border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.7)] flex flex-col overflow-hidden transition-all duration-400 opacity-0 scale-95 pointer-events-none transform origin-bottom-right">
+        
+        <!-- Expanded Orbit Ring Header Accent -->
+        <div class="h-1 w-full bg-gradient-to-r from-brand-teal via-brand-indigo to-brand-teal"></div>
+
+        <!-- Chat Header Bar -->
+        <div class="p-4 border-b border-white/5 flex items-center justify-between bg-white/5">
+            <div class="flex items-center gap-3">
+                <div class="relative w-9 h-9 rounded-full bg-gradient-to-tr from-brand-teal to-brand-indigo p-0.5 shadow-md">
+                    <div class="w-full h-full bg-brand-dark rounded-full flex items-center justify-center text-brand-teal">
+                        <i data-lucide="bot" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-white flex items-center gap-1.5">
+                        Dr. AI Concierge
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-brand-teal"></i>
+                    </h3>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span class="text-[10px] text-zinc-400 font-medium">Online & Ready</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <button onclick="toggleAIChat()" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-colors">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Messages Scroll Area -->
+        <div id="ai-chat-messages" class="flex-1 p-4 overflow-y-auto space-y-4 text-xs font-sans">
+            <!-- Messages populated dynamically via JS -->
+        </div>
+
+        <!-- Quick Action Chips Bar -->
+        <div id="ai-quick-chips" class="px-4 py-2 flex items-center gap-2 overflow-x-auto no-scrollbar border-t border-white/5 bg-black/20">
+            <button onclick="handleChipClick('Teeth Whitening')" class="shrink-0 px-3 py-1.5 rounded-full bg-white/5 hover:bg-brand-teal/20 hover:border-brand-teal/40 border border-white/10 text-[11px] text-zinc-300 transition-colors">
+                🦷 Teeth Whitening
+            </button>
+            <button onclick="handleChipClick('Pricing Quotes')" class="shrink-0 px-3 py-1.5 rounded-full bg-white/5 hover:bg-brand-teal/20 hover:border-brand-teal/40 border border-white/10 text-[11px] text-zinc-300 transition-colors">
+                💰 Pricing
+            </button>
+            <button onclick="handleChipClick('Book Appointment')" class="shrink-0 px-3 py-1.5 rounded-full bg-white/5 hover:bg-brand-teal/20 hover:border-brand-teal/40 border border-white/10 text-[11px] text-zinc-300 transition-colors">
+                📅 Book Visit
+            </button>
+            <button onclick="handleChipClick('Symptom Check')" class="shrink-0 px-3 py-1.5 rounded-full bg-white/5 hover:bg-brand-teal/20 hover:border-brand-teal/40 border border-white/10 text-[11px] text-zinc-300 transition-colors">
+                🔍 Check Symptoms
+            </button>
+        </div>
+
+        <!-- Input Box Area -->
+        <div class="p-3 bg-white/5 border-t border-white/5">
+            <form onsubmit="handleUserMessageSend(event)" class="relative flex items-center">
+                <input id="ai-chat-input" type="text" placeholder="Ask Dr. AI anything about dental care..." class="w-full pl-4 pr-12 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-zinc-500 text-xs focus:outline-none focus:border-brand-teal focus:ring-1 focus:ring-brand-teal transition-all">
+                
+                <button type="submit" class="absolute right-2 w-8 h-8 rounded-lg bg-gradient-to-r from-brand-teal to-brand-indigo flex items-center justify-center text-white shadow-md hover:scale-105 transition-transform">
+                    <i data-lucide="arrow-up" class="w-4 h-4"></i>
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // ==========================================
+        // 🔗 BACKEND CONNECTION
+        // ==========================================
+        // When frontend + backend run on the same origin (e.g. `npm start`
+        // locally, or both served by the same host) leave this as ''.
+        // When the frontend is deployed separately (e.g. Cloudflare Pages)
+        // from the backend (e.g. Google Cloud Run), set this to your
+        // backend's full URL, such as:
+        //   const API_BASE_URL = 'https://aurelia-dental-api-xxxxx.a.run.app';
+        const API_BASE_URL = '';
+
+        // Navbar shrink-on-scroll
+        const navbarEl = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 40) {
+                navbarEl.classList.add('navbar-scrolled');
+            } else {
+                navbarEl.classList.remove('navbar-scrolled');
+            }
+        }, { passive: true });
+
+        // Scroll-triggered section reveal
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
+
+        // Custom Cursor Movement
+        const dot = document.getElementById('cursor-dot');
+        const ring = document.getElementById('cursor-ring');
+
+        window.addEventListener('mousemove', (e) => {
+            if(dot && ring) {
+                dot.style.left = `${e.clientX}px`;
+                dot.style.top = `${e.clientY}px`;
+                ring.style.left = `${e.clientX}px`;
+                ring.style.top = `${e.clientY}px`;
+            }
+        });
+
+        // 3D Tilt Card Effect
+        document.querySelectorAll('.tilt-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                card.style.transform = `perspective(1000px) rotateX(${-y / 20}deg) rotateY(${x / 20}deg) translateY(-6px)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+            });
+        });
+
+        // Interactive Hero 3D Tooth Mouse Parallax
+        const heroTooth = document.getElementById('hero-3d-tooth');
+        if(heroTooth) {
+            window.addEventListener('mousemove', (e) => {
+                const moveX = (e.clientX - window.innerWidth / 2) / 40;
+                const moveY = (e.clientY - window.innerHeight / 2) / 40;
+                heroTooth.style.transform = `rotateY(${moveX}deg) rotateX(${-moveY}deg)`;
+            });
+        }
+
+        // ==========================================
+        // 🤖 DR. AI ASSISTANT CONVERSATION ENGINE
+        // ==========================================
+
+        let isChatOpen = false;
+        const chatWindow = document.getElementById('ai-chat-window');
+        const notificationDot = document.getElementById('ai-notification-dot');
+        const tooltip = document.getElementById('ai-proactive-tooltip');
+        const messagesContainer = document.getElementById('ai-chat-messages');
+
+        // Initial Greeting State
+        const chatHistory = [
+            {
+                sender: 'ai',
+                text: "Welcome to Aurelia Dental Concierge! 🦷✨ I'm Dr. AI. How may I assist your smile today?",
+                time: getFormattedTime()
+            }
+        ];
+
+        function getFormattedTime() {
+            const now = new Date();
+            return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function renderMessages() {
+            messagesContainer.innerHTML = '';
+            chatHistory.forEach(msg => {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'} space-y-1 animate-fadeIn`;
+
+                if(msg.sender === 'ai') {
+                    msgDiv.innerHTML = `
+                        <div class="flex items-start gap-2 max-w-[85%]">
+                            <div class="w-6 h-6 rounded-full bg-brand-teal/20 border border-brand-teal/40 flex items-center justify-center text-brand-teal shrink-0 mt-1">
+                                <i data-lucide="bot" class="w-3.5 h-3.5"></i>
+                            </div>
+                            <div class="bg-white/5 border border-white/10 rounded-2xl rounded-tl-none p-3 text-zinc-200 leading-relaxed">
+                                ${msg.text}
+                            </div>
+                        </div>
+                        <span class="text-[9px] text-zinc-600 pl-8">${msg.time}</span>
+                    `;
+                } else {
+                    msgDiv.innerHTML = `
+                        <div class="max-w-[85%] bg-gradient-to-r from-brand-teal to-brand-indigo text-white rounded-2xl rounded-tr-none p-3 font-medium">
+                            ${msg.text}
+                        </div>
+                        <span class="text-[9px] text-zinc-600 pr-1">${msg.time}</span>
+                    `;
+                }
+                messagesContainer.appendChild(msgDiv);
+            });
+            lucide.createIcons();
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function toggleAIChat() {
+            isChatOpen = !isChatOpen;
+            if(isChatOpen) {
+                chatWindow.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+                chatWindow.classList.add('opacity-100', 'scale-100', 'pointer-events-auto');
+                notificationDot.classList.add('hidden');
+                hideProactiveTooltip();
+                renderMessages();
+            } else {
+                chatWindow.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+                chatWindow.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
+            }
+        }
+
+        function openChatWithPrompt(promptText) {
+            if(!isChatOpen) toggleAIChat();
+            addUserMessage(promptText);
+        }
+
+        function handleUserMessageSend(e) {
+            e.preventDefault();
+            const input = document.getElementById('ai-chat-input');
+            const text = input.value.trim();
+            if(!text) return;
+            
+            input.value = '';
+            addUserMessage(text);
+        }
+
+        function handleChipClick(chipName) {
+            addUserMessage(chipName);
+        }
+
+        async function addUserMessage(text) {
+            chatHistory.push({
+                sender: 'user',
+                text: text,
+                time: getFormattedTime()
+            });
+            renderMessages();
+            showTypingIndicator();
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text, history: chatHistory.slice(0, -1) })
+                });
+
+                if (!response.ok) throw new Error(`Server responded ${response.status}`);
+                const data = await response.json();
+
+                removeTypingIndicator();
+                chatHistory.push({
+                    sender: 'ai',
+                    text: data.reply || "I'm here to help — could you rephrase that?",
+                    time: getFormattedTime()
+                });
+                renderMessages();
+            } catch (err) {
+                console.error('Dr. AI chat error:', err);
+                removeTypingIndicator();
+                chatHistory.push({
+                    sender: 'ai',
+                    text: "I'm having trouble connecting to the concierge service right now. Please try again in a moment, or call our front desk directly.",
+                    time: getFormattedTime()
+                });
+                renderMessages();
+            }
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'ai-typing-indicator';
+            typingDiv.className = 'flex items-center gap-2 pl-8';
+            typingDiv.innerHTML = `
+                <div class="bg-white/5 border border-white/10 rounded-full px-4 py-2 flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 bg-brand-teal rounded-full dot-1"></span>
+                    <span class="w-1.5 h-1.5 bg-brand-teal rounded-full dot-2"></span>
+                    <span class="w-1.5 h-1.5 bg-brand-teal rounded-full dot-3"></span>
+                </div>
+            `;
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typingDiv = document.getElementById('ai-typing-indicator');
+            if(typingDiv) typingDiv.remove();
+        }
+
+        // Proactive Greeting Tooltip Trigger
+        setTimeout(() => {
+            if(!isChatOpen) {
+                tooltip.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+                tooltip.classList.add('opacity-100', 'translate-y-0');
+                
+                setTimeout(() => {
+                    hideProactiveTooltip();
+                }, 6000);
+            }
+        }, 4000);
+
+        function hideProactiveTooltip() {
+            tooltip.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+            tooltip.classList.remove('opacity-100', 'translate-y-0');
+        }
+
+        // Form Submit Handler — real POST to the booking API
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const form = document.getElementById('booking-form');
+            const submitBtn = document.getElementById('bf-submit');
+            const submitLabel = document.getElementById('bf-submit-label');
+            const bannerSlot = document.getElementById('form-banner-slot');
+
+            const payload = {
+                name: document.getElementById('bf-name').value.trim(),
+                phone: document.getElementById('bf-phone').value.trim(),
+                email: document.getElementById('bf-email').value.trim(),
+                treatment: document.getElementById('bf-treatment').value,
+                date: document.getElementById('bf-date').value,
+            };
+
+            bannerSlot.innerHTML = '';
+            submitBtn.disabled = true;
+            submitLabel.innerHTML = '<span class="btn-spinner"></span> Submitting…';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/bookings`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    const msg = (data.errors && data.errors.join(' ')) || 'Something went wrong. Please check your details and try again.';
+                    bannerSlot.innerHTML = `<div class="form-banner error"><i data-lucide="alert-circle" class="w-4 h-4 shrink-0 mt-0.5"></i><span>${msg}</span></div>`;
+                } else {
+                    bannerSlot.innerHTML = `<div class="form-banner success"><i data-lucide="check-circle-2" class="w-4 h-4 shrink-0 mt-0.5"></i><span>✨ Thank you, ${payload.name.split(' ')[0]}! Your VIP reservation request has been received. Our concierge team will confirm shortly.</span></div>`;
+                    form.reset();
+                }
+            } catch (err) {
+                console.error('Booking submission error:', err);
+                bannerSlot.innerHTML = `<div class="form-banner error"><i data-lucide="alert-circle" class="w-4 h-4 shrink-0 mt-0.5"></i><span>We couldn't reach the reservation service. Please check your connection and try again.</span></div>`;
+            } finally {
+                submitBtn.disabled = false;
+                submitLabel.textContent = 'Submit Reservation';
+                lucide.createIcons();
+            }
+        }
+    </script>
+</body>
+</html>
