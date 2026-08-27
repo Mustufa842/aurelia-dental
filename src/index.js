@@ -1,5 +1,6 @@
 import { validateBooking } from './lib/validate.js';
 import { ruleBasedReply, anthropicReply } from './lib/knowledge.js';
+import { notifyAdminNewBooking, notifyCustomerBookingReceived, notifyCustomerStatusUpdate } from './lib/email.js';
 
 function json(data, init = {}) {
   return Response.json(data, init);
@@ -40,7 +41,7 @@ async function handleChat(request, env) {
   }
 }
 
-async function handleCreateBooking(request, env) {
+async function handleCreateBooking(request, env, ctx) {
   const body = await request.json().catch(() => ({}));
   const { errors, clean } = validateBooking(body);
 
@@ -60,6 +61,10 @@ async function handleCreateBooking(request, env) {
 
   const booking = { id, ...clean, status: 'pending', createdAt };
 
+  ctx.waitUntil(
+    Promise.all([notifyAdminNewBooking(booking, env), notifyCustomerBookingReceived(booking, env)])
+  );
+
   return json(
     { success: true, message: 'Reservation received. Our concierge team will confirm shortly.', booking },
     { status: 201 }
@@ -74,7 +79,7 @@ async function handleListBookings(request, env) {
   return json({ success: true, bookings: results });
 }
 
-async function handleUpdateBooking(request, env, id) {
+async function handleUpdateBooking(request, env, ctx, id) {
   if (request.headers.get('x-admin-key') !== env.ADMIN_KEY) {
     return json({ success: false, error: 'Unauthorized' }, { status: 401 });
   }
@@ -93,7 +98,16 @@ async function handleUpdateBooking(request, env, id) {
     return json({ success: false, error: 'Not found' }, { status: 404 });
   }
 
+  ctx.waitUntil(notifyCustomerStatusUpdate(booking, env));
+
   return json({ success: true, booking });
+}
+
+async function handleAdminVerify(request, env) {
+  if (request.headers.get('x-admin-key') !== env.ADMIN_KEY) {
+    return json({ success: false, error: 'Unauthorized' }, { status: 401 });
+  }
+  return json({ success: true });
 }
 
 export default {
@@ -112,16 +126,20 @@ export default {
       }
 
       if (pathname === '/api/bookings' && method === 'POST') {
-        return await handleCreateBooking(request, env);
+        return await handleCreateBooking(request, env, ctx);
       }
 
       if (pathname === '/api/bookings' && method === 'GET') {
         return await handleListBookings(request, env);
       }
 
+      if (pathname === '/api/admin/verify' && method === 'GET') {
+        return await handleAdminVerify(request, env);
+      }
+
       const bookingMatch = pathname.match(/^\/api\/bookings\/([^/]+)$/);
       if (bookingMatch && method === 'PATCH') {
-        return await handleUpdateBooking(request, env, bookingMatch[1]);
+        return await handleUpdateBooking(request, env, ctx, bookingMatch[1]);
       }
 
       if (pathname.startsWith('/api/')) {

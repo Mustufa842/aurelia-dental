@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aurelia Dental — Admin Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: { brand: { dark: '#0f0f11', light: '#fafafa', teal: '#06b6d4', gold: '#d4a574', slate: '#18181b' } },
+        fontFamily: { serif: ['Cormorant Garamond', 'serif'], sans: ['Inter', 'sans-serif'] }
+      }
+    }
+  }
+</script>
+<style>
+  body { background: #0f0f11; color: #fafafa; font-family: 'Inter', sans-serif; }
+  .status-pending { color: #d4a574; background: rgba(212,165,116,0.12); }
+  .status-confirmed { color: #34d399; background: rgba(52,211,153,0.12); }
+  .status-cancelled { color: #f87171; background: rgba(248,113,113,0.12); }
+  .btn-spinner { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.25); border-top-color: #000; animation: spin 0.7s linear infinite; display: inline-block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Login gate -->
+  <div id="login-screen" class="min-h-screen flex items-center justify-center px-6">
+    <div class="w-full max-w-sm">
+      <div class="text-center mb-8">
+        <span class="font-serif text-2xl tracking-wide">AURELIA</span>
+        <div class="text-[10px] tracking-[0.3em] text-brand-gold mt-1">ADMIN PORTAL</div>
+      </div>
+      <form id="login-form" class="space-y-4">
+        <div>
+          <label class="block text-xs text-zinc-400 mb-1">Admin Key</label>
+          <input id="admin-key-input" type="password" required placeholder="Enter your admin key"
+                 class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-zinc-600 focus:outline-none focus:border-brand-teal text-sm">
+        </div>
+        <div id="login-error" class="text-xs text-red-400 hidden"></div>
+        <button type="submit" id="login-btn" class="w-full py-3 rounded-xl bg-brand-teal text-black font-semibold text-xs tracking-widest uppercase hover:bg-cyan-300 transition-colors flex items-center justify-center gap-2">
+          <span id="login-btn-label">Sign In</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard-screen" class="hidden max-w-6xl mx-auto px-6 py-10">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <span class="font-serif text-2xl tracking-wide">AURELIA</span>
+        <div class="text-[10px] tracking-[0.3em] text-brand-gold mt-1">ADMIN PORTAL</div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button id="refresh-btn" class="text-xs px-4 py-2 rounded-full border border-white/15 hover:border-brand-teal transition-colors">Refresh</button>
+        <button id="logout-btn" class="text-xs px-4 py-2 rounded-full border border-white/15 hover:border-red-400 transition-colors">Sign Out</button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+      <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+        <div class="text-2xl font-serif" id="stat-total">—</div>
+        <div class="text-[11px] text-zinc-400 uppercase tracking-wider mt-1">Total</div>
+      </div>
+      <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+        <div class="text-2xl font-serif text-brand-gold" id="stat-pending">—</div>
+        <div class="text-[11px] text-zinc-400 uppercase tracking-wider mt-1">Pending</div>
+      </div>
+      <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+        <div class="text-2xl font-serif text-emerald-400" id="stat-confirmed">—</div>
+        <div class="text-[11px] text-zinc-400 uppercase tracking-wider mt-1">Confirmed</div>
+      </div>
+      <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+        <div class="text-2xl font-serif text-red-400" id="stat-cancelled">—</div>
+        <div class="text-[11px] text-zinc-400 uppercase tracking-wider mt-1">Cancelled</div>
+      </div>
+    </div>
+
+    <div id="bookings-empty" class="hidden text-center py-20 text-zinc-500 text-sm">No reservations yet.</div>
+    <div id="bookings-list" class="space-y-3"></div>
+  </div>
+
+  <script>
+    const ADMIN_KEY_STORAGE = 'aurelia_admin_key';
+
+    function getStoredKey() { return sessionStorage.getItem(ADMIN_KEY_STORAGE); }
+    function setStoredKey(key) { sessionStorage.setItem(ADMIN_KEY_STORAGE, key); }
+    function clearStoredKey() { sessionStorage.removeItem(ADMIN_KEY_STORAGE); }
+
+    const loginScreen = document.getElementById('login-screen');
+    const dashboardScreen = document.getElementById('dashboard-screen');
+    const loginForm = document.getElementById('login-form');
+    const loginError = document.getElementById('login-error');
+    const loginBtn = document.getElementById('login-btn');
+    const loginBtnLabel = document.getElementById('login-btn-label');
+
+    async function verifyKey(key) {
+      const res = await fetch('/api/admin/verify', { headers: { 'x-admin-key': key } });
+      return res.ok;
+    }
+
+    async function tryAutoLogin() {
+      const key = getStoredKey();
+      if (!key) return;
+      const ok = await verifyKey(key);
+      if (ok) showDashboard();
+      else clearStoredKey();
+    }
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const key = document.getElementById('admin-key-input').value.trim();
+      loginError.classList.add('hidden');
+      loginBtn.disabled = true;
+      loginBtnLabel.innerHTML = '<span class="btn-spinner"></span>';
+
+      try {
+        const ok = await verifyKey(key);
+        if (ok) {
+          setStoredKey(key);
+          showDashboard();
+        } else {
+          loginError.textContent = 'Incorrect admin key.';
+          loginError.classList.remove('hidden');
+        }
+      } catch (err) {
+        loginError.textContent = "Couldn't reach the server. Try again.";
+        loginError.classList.remove('hidden');
+      } finally {
+        loginBtn.disabled = false;
+        loginBtnLabel.textContent = 'Sign In';
+      }
+    });
+
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      clearStoredKey();
+      dashboardScreen.classList.add('hidden');
+      loginScreen.classList.remove('hidden');
+    });
+
+    document.getElementById('refresh-btn').addEventListener('click', loadBookings);
+
+    function showDashboard() {
+      loginScreen.classList.add('hidden');
+      dashboardScreen.classList.remove('hidden');
+      loadBookings();
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str || '';
+      return div.innerHTML;
+    }
+
+    function renderBookings(bookings) {
+      const list = document.getElementById('bookings-list');
+      const empty = document.getElementById('bookings-empty');
+
+      document.getElementById('stat-total').textContent = bookings.length;
+      document.getElementById('stat-pending').textContent = bookings.filter(b => b.status === 'pending').length;
+      document.getElementById('stat-confirmed').textContent = bookings.filter(b => b.status === 'confirmed').length;
+      document.getElementById('stat-cancelled').textContent = bookings.filter(b => b.status === 'cancelled').length;
+
+      if (!bookings.length) {
+        empty.classList.remove('hidden');
+        list.innerHTML = '';
+        return;
+      }
+      empty.classList.add('hidden');
+
+      list.innerHTML = bookings.map(b => `
+        <div class="rounded-2xl bg-white/5 border border-white/10 p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="font-serif text-lg">${escapeHtml(b.name)}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider status-${b.status}">${b.status}</span>
+            </div>
+            <div class="text-xs text-zinc-400 mt-1 space-x-3">
+              <span>${escapeHtml(b.treatment)}</span>
+              <span>·</span>
+              <span>${escapeHtml(b.date)}</span>
+              <span>·</span>
+              <span>${escapeHtml(b.phone)}</span>
+              ${b.email ? `<span>·</span><span>${escapeHtml(b.email)}</span>` : ''}
+            </div>
+            ${b.notes ? `<div class="text-xs text-zinc-500 mt-1">${escapeHtml(b.notes)}</div>` : ''}
+            <div class="text-[10px] text-zinc-600 mt-1">Requested ${new Date(b.created_at).toLocaleString()}</div>
+          </div>
+          <div class="flex gap-2 shrink-0">
+            ${b.status !== 'confirmed' ? `<button data-id="${b.id}" data-status="confirmed" class="status-btn text-xs px-3 py-2 rounded-lg bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25 transition-colors">Confirm</button>` : ''}
+            ${b.status !== 'cancelled' ? `<button data-id="${b.id}" data-status="cancelled" class="status-btn text-xs px-3 py-2 rounded-lg bg-red-500/15 text-red-400 hover:bg-red-500/25 transition-colors">Cancel</button>` : ''}
+            ${b.status !== 'pending' ? `<button data-id="${b.id}" data-status="pending" class="status-btn text-xs px-3 py-2 rounded-lg bg-white/10 text-zinc-300 hover:bg-white/20 transition-colors">Reset</button>` : ''}
+          </div>
+        </div>
+      `).join('');
+
+      document.querySelectorAll('.status-btn').forEach(btn => {
+        btn.addEventListener('click', () => updateStatus(btn.dataset.id, btn.dataset.status));
+      });
+    }
+
+    async function loadBookings() {
+      const key = getStoredKey();
+      try {
+        const res = await fetch('/api/bookings', { headers: { 'x-admin-key': key } });
+        if (res.status === 401) { clearStoredKey(); dashboardScreen.classList.add('hidden'); loginScreen.classList.remove('hidden'); return; }
+        const data = await res.json();
+        renderBookings(data.bookings || []);
+      } catch (err) {
+        console.error('Failed to load bookings:', err);
+      }
+    }
+
+    async function updateStatus(id, status) {
+      const key = getStoredKey();
+      try {
+        await fetch(`/api/bookings/${id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', 'x-admin-key': key },
+          body: JSON.stringify({ status })
+        });
+        loadBookings();
+      } catch (err) {
+        console.error('Failed to update booking:', err);
+      }
+    }
+
+    tryAutoLogin();
+  </script>
+</body>
+</html>
