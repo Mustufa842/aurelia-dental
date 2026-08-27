@@ -1,0 +1,12 @@
+name = "aurelia-dental"
+main = "src/index.js"
+compatibility_date = "2026-08-24"
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "aurelia-dental-db"
+database_id = "55f91a85-e4df-40e8-aec7-348f5cf34efc"

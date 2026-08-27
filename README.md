@@ -41,7 +41,6 @@ aurelia-dental/
 │   ├── api/bookings/[id].js
 │   └── _lib/                shared validation + Dr. AI reply logic
 ├── schema.sql               D1 table definition (Option B only)
-├── wrangler.toml             local dev config for Pages Functions
 ├── Dockerfile                for Option A on Google Cloud Run
 ├── package.json
 ├── .env.example              copy to .env to configure (all optional)
